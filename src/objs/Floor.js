@@ -2,10 +2,10 @@
  * Created by yanzhan1 on 10/7/2014.
  */
 
-var Mover = cc.Sprite.extend({
+var Floor = cc.Node.extend({
     layer: null,
-    ctor: function( layer ) {
+    ctor: function (layer) {
         this._super();
-        this.layer = layer;
+        cc.PhysicsSprite
     }
 })

@@ -4,15 +4,23 @@
 
 var GameLayer = cc.LayerColor.extend({
     scene: null,
+    player: null,
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
         this.setColor( Cfg.COLOR.LAYER );
+        this._initPlayer();
         this._registerInputs();
-        var node = new cc.DrawNode();
-        this.addChild( node, 0 );
-        node.clear();
-        node.drawRect( cc.p(100,100), cc.p(200,200), Cfg.COLOR.SQUARE, 0, Cfg.COLOR.SQUARE );
+    },
+
+    _initPlayer: function() {
+        var p = new Player( this );
+        this.addChild( p, GameLayer.Z.PLAYER );
+        this.player = p;
+        var square = new Square();
+        p.addShape( square );
+        p.setPosition( cc.p(100,100) );
+        p.scheduleUpdate();
     },
 
     _registerInputs: function() {
@@ -26,25 +34,23 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     onKeyPressed: function( key, event ) {
-        var dir;
         if( key == cc.KEY.a || key == cc.KEY.left ) {
-            dir = Def.LEFT;
+            this.player.moveBackward( true );
         } else if( key == cc.KEY.d || key == cc.KEY.right ) {
-            dir = Def.RIGHT;
-        }
-        if( this.state == GameLayer.STATE.GAME || this.state == GameLayer.STATE.PAUSE ) {
-            this.thief.changeDir( dir );
-            this.dirArrow.showArrows( dir );
-        } else if ( this.state == GameLayer.STATE.PREPARE ) {
-            this.thief.changeDir( dir );
-            this.dirArrow.showArrows( dir );
-            this._stupidGuards();
-            this.runGame();
+            this.player.moveFoward( true );
         }
     },
 
     onKeyReleased: function( key, event ) {
-
+        if( key == cc.KEY.a || key == cc.KEY.left ) {
+            this.player.moveBackward( false );
+        } else if( key == cc.KEY.d || key == cc.KEY.right ) {
+            this.player.moveFoward( false );
+        }
     }
 })
+
+GameLayer.Z = {
+    FLOOR: 1, PLAYER: 9
+}
 

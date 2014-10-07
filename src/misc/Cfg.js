@@ -9,3 +9,5 @@ Cfg.COLOR = {
     FLOOR: cc.color( 59, 54, 61 ),
     SQUARE: cc.color( 82, 40, 41 )
 }
+
+Cfg.PLAYER_SPEED = 200;
