@@ -20,7 +20,8 @@ var Player = cc.Node.extend({
     },
 
     moveFoward: function( isMove ) {
-        this._forwardSpeed = isMove ? this.speedCfg : 0;
+        this.shapes[0].body.applyImpulse(cp.v(150, 0), cp.v(0, 0));
+        //this._forwardSpeed = isMove ? this.speedCfg : 0;
     },
 
     moveBackward: function( isMove ) {
@@ -30,8 +31,8 @@ var Player = cc.Node.extend({
     processMove: function( dt ) {
         var speed = this._forwardSpeed - this._backwardSpeed;
         if( speed == 0 ) return;
-        var p = this.getPosition();
-        this.setPosition( cc.p(p.x+speed*dt, p.y) );
+        var p = this.shapes[0].getPosition();
+        this.shapes[0].setPosition( cc.p(p.x+speed*dt, p.y) );
     },
 
     update: function( dt ) {

@@ -5,12 +5,15 @@
 var GameLayer = cc.LayerColor.extend({
     scene: null,
     player: null,
+    phyMgr: null,
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
+        this.phyMgr = new PhysicsMgr( this );
         this.setColor( Cfg.COLOR.LAYER );
         this._initPlayer();
         this._registerInputs();
+        this.scheduleUpdate();
     },
 
     _initPlayer: function() {
@@ -20,7 +23,12 @@ var GameLayer = cc.LayerColor.extend({
         var square = new Square();
         p.addShape( square );
         p.setPosition( cc.p(100,100) );
+        this.phyMgr.addObj( square );
         p.scheduleUpdate();
+    },
+
+    update : function(dt) {
+        this.phyMgr.space.step(dt);
     },
 
     _registerInputs: function() {
