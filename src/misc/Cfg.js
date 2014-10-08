@@ -11,3 +11,5 @@ Cfg.COLOR = {
 }
 
 Cfg.PLAYER_SPEED = 200;
+Cfg.PHYSICS_GRAVITY = 0;
+Cfg.GRAVITY = 500;

@@ -14,7 +14,7 @@ var PhysicsMgr = cc.Class.extend({
     _initSpace: function() {
         var space = new cp.Space();
         space.iterations = 60;
-        space.gravity = cp.v(0, -500);
+        space.gravity = cp.v(0, -Cfg.PHYSICS_GRAVITY);
         space.sleepTimeThreshold = 0.5;
         space.collisionSlop = 0.5;
         space.sleepTimeThreshold = 0.5;
