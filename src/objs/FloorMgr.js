@@ -13,6 +13,9 @@ var FloorMgr = cc.Class.extend({
         this.space = layer.space;
         this.zOrder = zOrder;
         this._createFloors();
+        var player = this.layer.player;
+        this.space.addCollisionHandler( Cfg.TAGS.FLOOR, Cfg.TAGS.PLAYER,
+            player.onHitFloor.bind(player));
     },
 
     _createFloors: function() {
@@ -21,6 +24,7 @@ var FloorMgr = cc.Class.extend({
             var floor = new Floor( this, FloorMgr.CFG[i] );
             this.floors.push( floor );
             this.layer.addChild( floor, this.zOrder );
+            floor.shape.setCollisionType( Cfg.TAGS.FLOOR );
         }
     }
 })

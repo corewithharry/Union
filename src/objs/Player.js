@@ -7,15 +7,29 @@ var Player = cc.Node.extend({
     shapes: [],
     _forwardSpeed: 0,
     _backwardSpeed: 0,
+    _ySpeed: 0,
     speedCfg: 0,
     moveState: null,
     mainShape: null,
+    state: null,
 
     ctor: function( layer ) {
         this._super();
         this.layer = layer;
         this.speedCfg = Player.SPEED;
+        this._initSpeed();
+        this.setState( Player.STATE.FLY );
         this.setMoveState( Player.MOVE.STOP );
+    },
+
+    _initSpeed: function() {
+        this._ySpeed = 0;
+        this._forwardSpeed = 0;
+        this._backwardSpeed = 0;
+    },
+
+    setState: function( state ) {
+        this.state = state;
     },
 
     setMoveState: function( state ) {
@@ -27,50 +41,34 @@ var Player = cc.Node.extend({
         this.addChild( shape, 0 );
         shape.body.setPos( cc.p(Player.POS.x,Player.POS.y) );
         this.mainShape = shape;
+        this.mainShape.shape.setCollisionType( Cfg.TAGS.PLAYER );
     },
 
     moveFoward: function( isMove ) {
-//        if( isMove ) {
-//            if( this.moveState == Player.MOVE.FORWARD ) {
-//                return;
-//            }
-//            this.setMoveState( Player.MOVE.FORWARD );
-//            this.shapes[0].body.applyForce(cp.v(Player.XFORCE,0), cp.v(-100,0));
-//        } else {
-//            if( this.moveState == Player.MOVE.FORWARD ) {
-//                this.setMoveState( Player.MOVE.STOP );
-//                this.shapes[0].body.applyForce(cp.v(-Player.XFORCE,0), cp.v(0,0));
-//            }
-//        }
         this._forwardSpeed = isMove ? this.speedCfg : 0;
     },
 
     moveBackward: function( isMove ) {
-//        if( isMove ) {
-//            if( this.moveState == Player.MOVE.BACKWARD ) {
-//                return;
-//            }
-//            this.setMoveState( Player.MOVE.BACKWARD );
-//            this.shapes[0].body.applyForce(cp.v(-Player.XFORCE,0), cp.v(-100,0));
-//        } else {
-//            if( this.moveState == Player.MOVE.BACKWARD ) {
-//                this.setMoveState( Player.MOVE.STOP );
-//            }
-//            this.shapes[0].body.applyForce(cp.v(Player.XFORCE,0), cp.v(0,0));
-//        }
         this._backwardSpeed = isMove ? this.speedCfg : 0;
     },
 
     jump: function() {
-        this.mainShape.body.applyImpulse(cp.v(0, Player.JFORCE), cp.v(0, 0));
-        this.mainShape.body.vx = 0;
+        if( this.state == Player.STATE.FLY ) return;
+        this._ySpeed += Player.JFORCE;
+        this.setState( Player.STATE.FLY );
     },
 
     processMove: function( dt ) {
         var speed = this._forwardSpeed - this._backwardSpeed;
-        if( speed == 0 ) return;
         var p = this.getPos();
-        this.setPos( cc.p(p.x+speed*dt, p.y) );
+        var x = p.x + speed * dt;
+        var y = p.y + this._ySpeed * dt;
+        this.setPos( cc.p(x, y) );
+    },
+
+    processGravity: function( dt ) {
+        if( this.state == Player.STATE.FLOOR ) return;
+        this._ySpeed -= Cfg.GRAVITY * dt;
     },
 
     getPos: function() {
@@ -83,13 +81,22 @@ var Player = cc.Node.extend({
 
     update: function( dt ) {
         this.processMove( dt );
+        this.processGravity( dt );
+    },
+
+    onHitFloor: function( arbiter, space ) {
+//        var shapes = arbiter.getShapes();
+        this.setState( Player.STATE.FLOOR );
+        this._ySpeed = 0;
     }
 })
 
 Player.POS = { x:300, y:700 };
-Player.JFORCE = 900;
-Player.XFORCE = 1500;
+Player.JFORCE = 500;
 Player.SPEED = 400;
 Player.MOVE = {
     FORWARD: 1, BACKWARD: 2, STOP: 3
 };
+Player.STATE = {
+    FLOOR: 1, FLY: 2
+}

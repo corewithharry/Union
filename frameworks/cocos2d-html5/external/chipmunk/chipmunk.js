@@ -1556,13 +1556,10 @@
 
     Body.prototype.position_func = function(dt)
     {
-        //this.p = vadd(this.p, vmult(vadd(this.v, this.v_bias), dt));
-        //this.p = this.p + (this.v + this.v_bias) * dt;
-
-        this.p.x += (this.vx + this.v_biasx) * dt;
-        this.p.y += (this.vy + this.v_biasy) * dt;
-
-        this.setAngleInternal(this.a + (this.w + this.w_bias)*dt);
+//        this.p.x += (this.vx + this.v_biasx) * dt;
+//        this.p.y += (this.vy + this.v_biasy) * dt;
+//
+//        this.setAngleInternal(this.a + (this.w + this.w_bias)*dt);
 
         this.v_biasx = this.v_biasy = 0;
         this.w_bias = 0;

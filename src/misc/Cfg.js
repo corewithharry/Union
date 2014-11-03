@@ -11,4 +11,7 @@ Cfg.COLOR = {
 }
 
 Cfg.PHYSICS_GRAVITY = 1500;
-Cfg.GRAVITY = 1;
+Cfg.GRAVITY = 1000;
+Cfg.TAGS = {
+    FLOOR: 1, PLAYER: 2
+};

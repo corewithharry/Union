@@ -37,5 +37,4 @@ var Floor = cc.Node.extend({
         this.shape.setElasticity( 0 );
         this.shape.setFriction( 1 );
     }
-
 })
