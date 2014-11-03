@@ -9,11 +9,12 @@ var Player = cc.Node.extend({
     _backwardSpeed: 0,
     speedCfg: 0,
     moveState: null,
+    mainShape: null,
 
     ctor: function( layer ) {
         this._super();
         this.layer = layer;
-        this.speedCfg = Cfg.PLAYER_SPEED;
+        this.speedCfg = Player.SPEED;
         this.setMoveState( Player.MOVE.STOP );
     },
 
@@ -25,6 +26,7 @@ var Player = cc.Node.extend({
         this.shapes.push( shape );
         this.addChild( shape, 0 );
         shape.body.setPos( cc.p(Player.POS.x,Player.POS.y) );
+        this.mainShape = shape;
     },
 
     moveFoward: function( isMove ) {
@@ -60,16 +62,23 @@ var Player = cc.Node.extend({
     },
 
     jump: function() {
-        this.shapes[0].body.applyImpulse(cp.v(0, Player.JFORCE), cp.v(0, 0));
-        this.shapes[0].body.vx = 0;
+        this.mainShape.body.applyImpulse(cp.v(0, Player.JFORCE), cp.v(0, 0));
+        this.mainShape.body.vx = 0;
     },
 
     processMove: function( dt ) {
         var speed = this._forwardSpeed - this._backwardSpeed;
         if( speed == 0 ) return;
-        var p = this.shapes[0].body.getPos();
-        //this.shapes[0].setPosition( cc.p(p.x+speed*dt, p.y) );
-        this.shapes[0].body.setPos( cc.p(p.x+speed*dt, p.y) );
+        var p = this.getPos();
+        this.setPos( cc.p(p.x+speed*dt, p.y) );
+    },
+
+    getPos: function() {
+        return this.mainShape.body.getPos();
+    },
+
+    setPos: function( pos ) {
+        this.mainShape.body.setPos(pos);
     },
 
     update: function( dt ) {
@@ -80,6 +89,7 @@ var Player = cc.Node.extend({
 Player.POS = { x:300, y:700 };
 Player.JFORCE = 900;
 Player.XFORCE = 1500;
+Player.SPEED = 400;
 Player.MOVE = {
     FORWARD: 1, BACKWARD: 2, STOP: 3
 };

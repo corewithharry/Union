@@ -2,29 +2,29 @@
  * Created by yanzhan1 on 10/7/2014.
  */
 
-var GameLayer = cc.LayerColor.extend({
+var GameLayer = cc.Layer.extend({
     scene: null,
     player: null,
     space: null,
     floorMgr: null,
+    cameraCtrl: null,
 
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
-        this._initPhysics();
-        this.setColor( Cfg.COLOR.LAYER );
-        this.floorMgr = new FloorMgr( this, GameLayer.Z.FLOOR );
-        this._initPlayer();
         this._registerInputs();
+        this._initPhysics();
+        this._initPlayer();
+        this.cameraCtrl = new CameraCtrl( this );
+        this.floorMgr = new FloorMgr( this, GameLayer.Z.FLOOR );
         this.scheduleUpdate();
+
     },
 
     _initPhysics: function() {
         var space = new cp.Space();
         space.iterations = 60;
         space.gravity = cp.v(0, -Cfg.PHYSICS_GRAVITY);
-        space.sleepTimeThreshold = 0.5;
-        //space.collisionSlop = 0;
         space.sleepTimeThreshold = 0.5;
         this.space = space;
         this.debugNode = cc.PhysicsDebugNode.create( this.space );
@@ -43,6 +43,7 @@ var GameLayer = cc.LayerColor.extend({
 
     update : function(dt) {
         this.space.step(dt);
+        this.cameraCtrl.update(dt);
     },
 
     _registerInputs: function() {
@@ -75,6 +76,6 @@ var GameLayer = cc.LayerColor.extend({
 })
 
 GameLayer.Z = {
-    FLOOR: 1, PLAYER: 9
+    BACK: 0, FLOOR: 1, PLAYER: 9
 }
 

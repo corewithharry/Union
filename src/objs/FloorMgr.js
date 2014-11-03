@@ -28,5 +28,5 @@ var FloorMgr = cc.Class.extend({
 FloorMgr.CFG = [
     { x: 100, y: 500, width: 300, height: 10, slope: 0 },
     { x: 412, y: 498, width: 300, height: 10, slope: -100 },
-    { x: 700, y: 100, width: 600, height: 10, slope: 0 }
+    { x: 0, y: 600, width: 6000, height: 10, slope: 0 }
 ]

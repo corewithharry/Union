@@ -10,6 +10,5 @@ Cfg.COLOR = {
     SQUARE: cc.color( 82, 40, 41 )
 }
 
-Cfg.PLAYER_SPEED = 200;
 Cfg.PHYSICS_GRAVITY = 1500;
 Cfg.GRAVITY = 1;

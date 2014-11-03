@@ -7,9 +7,7 @@ var GameScene = cc.Scene.extend({
         this._super();
         g_size = cc.winSize;
         initRes();
-        this.layer = new GameLayer();
-        //this.layer = new EditorLayer();
-        //this.layer = new MenuLayer( this );
+        this.layer = new BackgroundLayer( this );
         this.addChild( this.layer );
     }
 });
