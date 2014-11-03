@@ -6,21 +6,25 @@ var Shape = cc.PhysicsSprite.extend({
     drawNode: null,
     body: null,
     shape: null,
+    space: null,
+    layer: null,
 
-    ctor: function() {
+    ctor: function( layer ) {
         this._super();
-        var node = new cc.DrawNode();
-        this.addChild( node, 0 );
-        node.clear();
-        this.drawNode = node;
+        this.layer = layer;
+        this.space = layer.space;
+        this._initDrawNode();
         this._initBody();
         this._initShape();
     },
 
+    _initDrawNode: function() {
+        var node = new cc.DrawNode();
+        this.addChild( node, 0 );
+        node.clear();
+        this.drawNode = node;
+    },
+
     _initBody: function() {
-//        var body = new cp.Body(1, cp.momentForBox(1, 100, 100) );
-//        body.setPos( cc.p(0,0) );
-//        this.body = body;
-//        this.setBody( body );
     }
 })

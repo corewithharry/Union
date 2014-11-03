@@ -5,30 +5,44 @@
 var GameLayer = cc.LayerColor.extend({
     scene: null,
     player: null,
-    phyMgr: null,
+    space: null,
+    floorMgr: null,
+
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
-        this.phyMgr = new PhysicsMgr( this );
+        this._initPhysics();
         this.setColor( Cfg.COLOR.LAYER );
+        this.floorMgr = new FloorMgr( this, GameLayer.Z.FLOOR );
         this._initPlayer();
         this._registerInputs();
         this.scheduleUpdate();
+    },
+
+    _initPhysics: function() {
+        var space = new cp.Space();
+        space.iterations = 60;
+        space.gravity = cp.v(0, -Cfg.PHYSICS_GRAVITY);
+        space.sleepTimeThreshold = 0.5;
+        //space.collisionSlop = 0;
+        space.sleepTimeThreshold = 0.5;
+        this.space = space;
+        this.debugNode = cc.PhysicsDebugNode.create( this.space );
+        this.debugNode.visible = true ;
+        this.addChild( this.debugNode );
     },
 
     _initPlayer: function() {
         var p = new Player( this );
         this.addChild( p, GameLayer.Z.PLAYER );
         this.player = p;
-        var square = new Square();
+        var square = new Square( this );
         p.addShape( square );
-        p.setPosition( cc.p(100,100) );
-        this.phyMgr.addObj( square );
         p.scheduleUpdate();
     },
 
     update : function(dt) {
-        this.phyMgr.space.step(dt);
+        this.space.step(dt);
     },
 
     _registerInputs: function() {
@@ -46,6 +60,8 @@ var GameLayer = cc.LayerColor.extend({
             this.player.moveBackward( true );
         } else if( key == cc.KEY.d || key == cc.KEY.right ) {
             this.player.moveFoward( true );
+        } else if( key == cc.KEY.space ) {
+            this.player.jump();
         }
     },
 

@@ -16,10 +16,11 @@
         "src/misc/Def.js",
         "src/misc/Cfg.js",
         "src/misc/Util.js",
+        "src/objs/Floor.js",
+        "src/objs/FloorMgr.js",
         "src/objs/Player.js",
         "src/objs/Shape.js",
         "src/objs/Square.js",
-        "src/PhysicsMgr.js",
         "src/GameLayer.js"
     ]
 }

@@ -8,7 +8,8 @@ var Square = Shape.extend({
     ctor: function( layer ) {
         this._init();
         this._super( layer );
-        this._initDrawNode();
+        this.drawNode.drawRect( cc.p(-this.len/4,-this.len/4), cc.p(this.len/4,this.len/4),
+            Cfg.COLOR.SQUARE, 0, Cfg.COLOR.SQUARE );
     },
 
     _init: function() {
@@ -18,20 +19,19 @@ var Square = Shape.extend({
     _initBody: function() {
         var mass = 1;
         var body = new cp.Body(mass, cp.momentForBox(mass, this.len, this.len) );
-        body.setPos( cc.p(0,0) );
         this.body = body;
+        body.setAngle( 0 );
+        body.setAngVel( 0 );
         this.setBody( body );
+        this.space.addBody( body );
     },
 
     _initShape: function() {
         var shape = new cp.BoxShape( this.body, this.len, this.len);
-        shape.setElasticity( 0.5 );
-        shape.setFriction( 0.5 );
+        shape.setElasticity( 0 );
+        shape.setFriction( 1 );
         this.shape = shape;
-    },
-
-    _initDrawNode: function() {
-        this.drawNode.drawRect( cc.p(0,0), cc.p(this.len,this.len), Cfg.COLOR.SQUARE, 0, Cfg.COLOR.SQUARE );
+        this.space.addShape( shape );
     }
 })
 
