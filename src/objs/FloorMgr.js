@@ -45,7 +45,7 @@ FloorMgr.CFG = [
     { x: 500, y: 480, width: 150, height: 1, slope: 0 },
     { x: 800, y: 580, width: 600, height: 1, slope: 0 },
     { x: 800, y: 700, width: 600, height: 1, slope: 0 },
-    { x: 99420, y: 498, width: 8000, height: 1, slope: -4000 }
+    { x: 100, y: 300, width: 8000, height: 1, slope: 0 }
     //{ x: 412, y: 498, width: 800, height: 10, slope: 0 },
     //{ x: 1212, y: 498, width: 0, height: 10, slope: -400 }
     //{ x: 0, y: 600, width: 6000, height: 10, slope: 0 }

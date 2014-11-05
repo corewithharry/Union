@@ -16,6 +16,8 @@
         "src/misc/Def.js",
         "src/misc/Cfg.js",
         "src/misc/Util.js",
+        "src/gui/ButtonMgr.js",
+        "src/gui/MyButton.js",
         "src/objs/CameraCtrl.js",
         "src/objs/Floor.js",
         "src/objs/FloorMgr.js",

@@ -8,11 +8,13 @@ var GameLayer = cc.Layer.extend({
     space: null,
     floorMgr: null,
     cameraCtrl: null,
+    btnMgr: null,
 
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
         this._registerInputs();
+        this._initButtons();
         this._initPhysics();
         this._initPlayer();
         this.cameraCtrl = new CameraCtrl( this );
@@ -31,6 +33,41 @@ var GameLayer = cc.Layer.extend({
         this.debugNode = cc.PhysicsDebugNode.create( this.space );
         this.debugNode.visible = true ;
         this.addChild( this.debugNode );
+    },
+
+    _initButtons: function() {
+        this.btnMgr = new ButtonMgr();
+        this.addChild( this.btnMgr, GameLayer.Z.UI );
+        // left move
+        var param = {
+            scale: { x: 1.6, y: 2.0 },
+            pos: { x: 0.10, y: 0.12 },
+            img1: res.MoveBtn_png,
+            pressCallBack: this.onPressLeft.bind(this),
+            releaseCallBack: this.onReleaseLeft.bind(this)
+        }
+        var btn = new MyButton( param );
+        this.btnMgr.addButton( btn );
+        // right move
+        var param = {
+            scale: { x: 1.6, y: 2.0 },
+            pos: { x: 0.26, y: 0.12 },
+            img1: res.MoveBtn_png,
+            pressCallBack: this.onPressRight.bind(this),
+            releaseCallBack: this.onReleaseRight.bind(this)
+        }
+        var btn = new MyButton( param );
+        btn.rotation = 180;
+        this.btnMgr.addButton( btn );
+        // jump
+        var param = {
+            scale: { x: 2.0, y: 2.0 },
+            pos: { x: 0.90, y: 0.12 },
+            img1: res.JumpBtn_png,
+            pressCallBack: this.onPressJump.bind(this)
+        }
+        var btn = new MyButton( param );
+        this.btnMgr.addButton( btn );
     },
 
     _initPlayer: function() {
@@ -59,13 +96,29 @@ var GameLayer = cc.Layer.extend({
         }, this);
     },
 
+    onPressLeft: function() {
+        this.player.moveBackward( true );
+    },
+    onReleaseLeft: function() {
+        this.player.moveBackward( false );
+    },
+    onPressRight: function() {
+        this.player.moveFoward( true );
+    },
+    onReleaseRight: function() {
+        this.player.moveFoward( false );
+    },
+    onPressJump: function() {
+        this.player.jump();
+    },
+
     onKeyPressed: function( key, event ) {
         if( key == cc.KEY.a || key == cc.KEY.left ) {
-            this.player.moveBackward( true );
+            this.onPressLeft();
         } else if( key == cc.KEY.d || key == cc.KEY.right ) {
-            this.player.moveFoward( true );
+            this.onPressRight();
         } else if( key == cc.KEY.space ) {
-            this.player.jump();
+            this.onPressJump();
         } else if( key == cc.KEY.z ) {
             this.player.gravity = this.player.gravity == 0 ? Cfg.GRAVITY : 0;
         }
@@ -73,14 +126,14 @@ var GameLayer = cc.Layer.extend({
 
     onKeyReleased: function( key, event ) {
         if( key == cc.KEY.a || key == cc.KEY.left ) {
-            this.player.moveBackward( false );
+            this.onReleaseLeft();
         } else if( key == cc.KEY.d || key == cc.KEY.right ) {
-            this.player.moveFoward( false );
+            this.onReleaseRight();
         }
     }
 })
 
 GameLayer.Z = {
-    BACK: 0, FLOOR: 1, PLAYER: 9
+    BACK: 0, FLOOR: 1, PLAYER: 2, UI: 9
 }
 
