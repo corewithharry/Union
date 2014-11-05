@@ -1556,8 +1556,8 @@
 
     Body.prototype.position_func = function(dt)
     {
-//        this.p.x += (this.vx + this.v_biasx) * dt;
-//        this.p.y += (this.vy + this.v_biasy) * dt;
+        this.p.x += (this.vx + this.v_biasx) * dt;
+        this.p.y += (this.vy + this.v_biasy) * dt;
 //
 //        this.setAngleInternal(this.a + (this.w + this.w_bias)*dt);
 

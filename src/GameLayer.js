@@ -17,6 +17,7 @@ var GameLayer = cc.Layer.extend({
         this._initPlayer();
         this.cameraCtrl = new CameraCtrl( this );
         this.floorMgr = new FloorMgr( this, GameLayer.Z.FLOOR );
+        this.player.setFloorMgr( this.floorMgr );
         this.scheduleUpdate();
 
     },
@@ -36,8 +37,10 @@ var GameLayer = cc.Layer.extend({
         var p = new Player( this );
         this.addChild( p, GameLayer.Z.PLAYER );
         this.player = p;
-        var square = new Square( this );
-        p.addShape( square );
+//        var avatar = new Square( this );
+//        var avatar = new Triangle(this);
+        var avatar = new Circle(this);
+        p.addAvatar( avatar );
         p.scheduleUpdate();
     },
 
@@ -63,6 +66,8 @@ var GameLayer = cc.Layer.extend({
             this.player.moveFoward( true );
         } else if( key == cc.KEY.space ) {
             this.player.jump();
+        } else if( key == cc.KEY.z ) {
+            this.player.gravity = this.player.gravity == 0 ? Cfg.GRAVITY : 0;
         }
     },
 

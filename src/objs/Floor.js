@@ -9,6 +9,7 @@ var Floor = cc.Node.extend({
     shape: null,
     mgr: null,
     space: null,
+    angle: 0,
 
     ctor: function ( mgr, cfg ) {
         this._super();
@@ -17,6 +18,7 @@ var Floor = cc.Node.extend({
         this.space = mgr.space;
         this._initDrawNode();
         this._initShape();
+        this.angle = Math.atan( this.cfg.slope / this.cfg.width );
     },
 
     _initDrawNode: function() {
@@ -33,8 +35,8 @@ var Floor = cc.Node.extend({
         var space = this.space;
         var cfg = this.cfg;
         this.shape = space.addShape(new cp.SegmentShape(space.staticBody,
-            cc.p(cfg.x,cfg.y), cc.p(cfg.x+cfg.width, cfg.y+cfg.slope), cfg.height));
+            cc.p(cfg.x,cfg.y), cc.p(cfg.x+cfg.width, cfg.y+cfg.slope), 1));
         this.shape.setElasticity( 0 );
-        this.shape.setFriction( 1 );
+        this.shape.setFriction( 1000 );
     }
 })

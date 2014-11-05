@@ -20,8 +20,10 @@
         "src/objs/Floor.js",
         "src/objs/FloorMgr.js",
         "src/objs/Player.js",
-        "src/objs/Shape.js",
-        "src/objs/Square.js",
+        "src/avatars/Shape.js",
+        "src/avatars/Square.js",
+        "src/avatars/Triangle.js",
+        "src/avatars/Circle.js",
         "src/BackgroundLayer.js",
         "src/GameLayer.js"
     ]
