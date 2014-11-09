@@ -26,7 +26,8 @@
         "src/avatars/Square.js",
         "src/avatars/Triangle.js",
         "src/avatars/Circle.js",
-        "src/BackgroundLayer.js",
-        "src/GameLayer.js"
+        "src/layer/BackgroundLayer.js",
+        "src/layer/PlatformLayer.js",
+        "src/layer/GameLayer.js"
     ]
 }

@@ -9,26 +9,33 @@ var GameLayer = cc.Layer.extend({
     floorMgr: null,
     cameraCtrl: null,
     btnMgr: null,
+    platform: null,
 
     ctor: function( scene ) {
         this._super();
         this.scene = scene;
         this._registerInputs();
-        this._initButtons();
+//        this._initButtons();
         this._initPhysics();
         this._initPlayer();
         this.cameraCtrl = new CameraCtrl( this );
-        this.floorMgr = new FloorMgr( this, GameLayer.Z.FLOOR );
-        this.player.setFloorMgr( this.floorMgr );
+        this._initPlatform();
         this.scheduleUpdate();
+    },
 
+    _initPlatform: function() {
+        this.platform = new PlatformLayer(this);
+        this.addChild( this.platform, GameLayer.Z.PLATFORM );
+        this.floorMgr = new FloorMgr( this.platform );
+        this.player.setPlatformLayer(this.platform);
+        this.player.setFloorMgr( this.floorMgr );
     },
 
     _initPhysics: function() {
         var space = new cp.Space();
         space.iterations = 60;
         space.gravity = cp.v(0, -Cfg.PHYSICS_GRAVITY);
-        space.sleepTimeThreshold = 0.5;
+        space.sleepTimeThreshold = 0.1;
         this.space = space;
         this.debugNode = cc.PhysicsDebugNode.create( this.space );
         this.debugNode.visible = true ;
@@ -134,6 +141,6 @@ var GameLayer = cc.Layer.extend({
 })
 
 GameLayer.Z = {
-    BACK: 0, FLOOR: 1, PLAYER: 2, UI: 9
+    BACK: 0, PLATFORM: 100, PLAYER: 200, UI: 900
 }
 

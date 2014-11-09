@@ -4,6 +4,7 @@
 
 var Player = cc.Node.extend({
     layer: null,
+    platform: null,
     floorMgr: null,
     avatars: [],
     _forwardSpeed: 0,
@@ -16,6 +17,7 @@ var Player = cc.Node.extend({
     state: null,
     gravity: 0,
     onFloorCount: 0,
+    offset: {x:-1000,y:0},
 
     ctor: function( layer ) {
         this._super();
@@ -35,6 +37,10 @@ var Player = cc.Node.extend({
 
     setFloorMgr: function( mgr ) {
         this.floorMgr = mgr;
+    },
+
+    setPlatformLayer: function( layer ) {
+        this.platform = layer;
     },
 
     setState: function( state ) {
@@ -80,7 +86,7 @@ var Player = cc.Node.extend({
 //        this._ySpeed += Player.JFORCE;
         this.setState( Player.STATE.FLY );
         this.mainAvatar.body.vx = 0;
-//        this.mainAvatar.body.v_biasx = 0;
+        this.mainAvatar.body.v_biasx = 0;
         this.mainAvatar.body.applyImpulse( cc.p(0,Player.JFORCE), cc.p(0,0) );
     },
 
@@ -101,6 +107,12 @@ var Player = cc.Node.extend({
         this.setPos( cc.p(x, y) );
     },
 
+    _updatePlatformPos: function() {
+//        var p = this.platform.getPosition();
+//        this.platform.setPosition( p.x-this.offset.x, p.y+this.offset.y );
+        this.layer.space.staticBody.setPos(this.offset);
+    },
+
     processGravity: function( dt ) {
         if( this.state == Player.STATE.FLOOR ) {
             this._ySpeed = 0;
@@ -119,7 +131,8 @@ var Player = cc.Node.extend({
 
     update: function( dt ) {
         this.processMove( dt );
-//        this.processGravity( dt );
+//        this.processFakeCamera(dt);
+        this.processGravity( dt );
     },
 
     onHitFloor: function( arbiter, space ) {
@@ -137,7 +150,7 @@ var Player = cc.Node.extend({
         this.curFloor = curFloor;
         this._ySpeed = 0;
         this.mainAvatar.body.vx = 0;
-//        this.mainAvatar.body.v_biasx = 0;
+        this.mainAvatar.body.v_biasx = 0;
         this.mainAvatar.body.setAngle(this.curFloor.angle);
         return true;
     },
@@ -146,7 +159,7 @@ var Player = cc.Node.extend({
         this.onFloorCount++;
         this.mainAvatar.body.vx = 0;
         this.mainAvatar.body.v_biasx = 0;
-        if(this.onFloorCount>40) {
+        if(this.onFloorCount>10) {
             this.mainAvatar.body.vy = 0;
             this.mainAvatar.body.v_biasy = 0;
         }
@@ -159,7 +172,7 @@ var Player = cc.Node.extend({
         var floor = shapes[0] == this.mainAvatar.shape ? shapes[1] : shapes[0];
         floor = this.floorMgr.getFloor( floor );
         var c = floor.cfg;
-        //if( this.moveState != Player.MOVE.STOP && x > c.x && x < c.x+c.width ) return;
+        if( this.moveState != Player.MOVE.STOP && x > c.x && x < c.x+c.width ) return;
         if( this.curFloor == floor ) {
             this.setState( Player.STATE.FLY );
         }
@@ -175,3 +188,7 @@ Player.MOVE = {
 Player.STATE = {
     FLOOR: 1, FLY: 2
 };
+Player.MAX_X = 0.6;
+Player.MIN_X = 0.2;
+Player.MAX_Y = 0.6;
+Player.MIN_Y = 0.2;
